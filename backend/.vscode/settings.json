@@ -1,0 +1,4 @@
+{
+    "thunder-client.httpLibrary": "got",
+    "thunder-client.saveToWorkspace": false
+}
