@@ -48,13 +48,19 @@ export async function logout() {
 }
 
 export async function getMe() {
-    try{
-        const response = await api.get("/get-me")
-        return response.data
-     }
-    catch(e){
-        console.log(e.response.data);
-         return null 
+    try {
+        const token = localStorage.getItem("token");
+        if (!token) return null;
+
+        const response = await api.get("/get-me", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch(e) {
+        console.log(e.response?.data);
+        return null;
     }
 }
 

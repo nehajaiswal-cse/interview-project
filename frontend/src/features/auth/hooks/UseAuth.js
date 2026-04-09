@@ -10,7 +10,10 @@ export const useAuth=()=>{
     const handleLogin = async({email,password})=>{
         setloading(true)
         try{
-            const data = await login({email,password})   
+            const data = await login({email,password}) 
+            if (res.token) {
+              localStorage.setItem("token", res.token);
+            }  
             setUser(data.user)
         }
        catch(e){
