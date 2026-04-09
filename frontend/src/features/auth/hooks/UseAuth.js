@@ -10,14 +10,18 @@ export const useAuth=()=>{
     const handleLogin = async({email,password})=>{
         setloading(true)
         try{
-            const data = await login({email,password}) 
-            if (res.token) {
-              localStorage.setItem("token", res.token);
-            }  
-            setUser(data.user)
+            const data = await login({email,password})
+            if (data?.token) {
+              localStorage.setItem("token", data.token)
+            }
+            if (data?.user) {
+              setUser(data.user)
+            }
+            return data
         }
        catch(e){
-           console.error("Login error:", e);
+           console.error("Login error:", e)
+           return null
         }
         finally{
             setloading(false)
@@ -29,9 +33,16 @@ export const useAuth=()=>{
         setloading(true)
         try{
            const data = await register({username,email,password})
-            setUser(data.user)
+            if (data?.token) {
+              localStorage.setItem("token", data.token)
+            }
+            if (data?.user) {
+              setUser(data.user)
+            }
+            return data
         }catch(err){
-
+            console.error("Register error:", err)
+            return null
         }
         finally{
            setloading(false)

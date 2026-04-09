@@ -24,6 +24,8 @@ export async function login({email,password}){
     try{
          const response = await api.post("/login",{
             email,password
+         },{
+            withCredentials:true
          })
         
         return response.data
