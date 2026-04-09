@@ -4,7 +4,6 @@ const jwt=require("jsonwebtoken")
 const tokenBlacklistModel=require("../Models/blacklist.model.js")
 
 
-console.log("USER MODEL =", userModel);
 /**
  * @name registerUserController
  * @description Register a new user,expects username,email and password in the request
