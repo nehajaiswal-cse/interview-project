@@ -1,12 +1,9 @@
-const { GoogleGenAI } = require("@google/genai");
+
 const{z}=require("zod")
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const{zodToJsonSchema}=require("zod-to-json-schema");
 const { be } = require("zod/locales");
 
-// The client gets the API key from the environment variable `GEMINI_API_KEY`.
-const ai = new GoogleGenAI({
-    apiKey:process.env.GOOGLE_GENAI_API_KEY
-});
 
 const interviewReportModel=z.object({
     matchScore:z.number().describe("The match score between the candidate's resume and the job description, represented as a percentage"),
@@ -86,18 +83,33 @@ ${selfDescription}
 Resume:
 ${resume}
 `
-    
-      const response = await ai.models.generateContent({
-        model:"gemini-3-flash-preview",
-        contents:prompt,
-        config:{
-            responseMimeType:"application/json",
-            responseSchema:zodToJsonSchema(interviewReportModel)
-            
-        }
-      })
+try {
+  const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+          {
+            model: "deepseek/deepseek-chat", // free model
+            messages: [
+                    { role: "user", content: prompt}
+                ]
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json",
+                }
+            }
+        );
 
-     return JSON.parse(response.text) 
+        return JSON.parse(response.text)
+
+    } catch (error) {
+        console.error("AI Error:", error.response?.data || error.message);
+       throw new Error(error.response?.data?.error?.message || error.message ||"AI generation failed" );
+    }
 }
+
+
+
+
 
 module.exports=generateInterviewReport
