@@ -8,7 +8,9 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin:"https://interview-project-frontend.onrender.com",
+    origin:[
+        "http://localhost:5173",
+        "https://interview-project-frontend.onrender.com"],
     credentials:true
 }))
 
