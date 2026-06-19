@@ -74,7 +74,7 @@ async function loginUserController(req,res) {
 
     if(!isPasswordValid){
         return res.status(400).json({
-            message:"Invalid   password"
+            message:"Invalid password"
         })
     }
 
@@ -94,6 +94,10 @@ async function loginUserController(req,res) {
     },
     token
  })
+ localStorage.setItem(
+   "token",
+   response.data.token
+)
 }
 
 /**
